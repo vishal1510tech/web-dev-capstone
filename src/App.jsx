@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import ThreatGallery from "./pages/ThreatGallery";
-import Resources from "./pages/Resources";
+import Navbar from "./Components/Navbar";
+import Home from "./Pages/Home";
+import ThreatGallery from "./Pages/ThreatGallery";
+import Resources from "./Pages/Resources";
 
 function App() {
   return (

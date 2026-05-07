@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
-import { threats, categories, severityConfig } from '../data/Threat'
-import ThreatCard from '../components/ThreatCard'
+import { threats, categories, severityConfig } from '../Data/Threat'
+import ThreatCard from '../Components/ThreatCard'
 
 const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 }
 const severities = ['All', 'critical', 'high', 'medium', 'low']
