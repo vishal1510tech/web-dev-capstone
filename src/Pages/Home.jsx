@@ -1,5 +1,5 @@
-import ToggleButton from "../components/ToggleButton";
-import BreachChecker from "../components/BreachChecker";
+import ToggleButton from "../Components/ToggleButton";
+import BreachChecker from "../Components/BreachChecker";
 
 function Home() {
   return (

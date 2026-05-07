@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { severityConfig } from '../data/Threat'
+import { severityConfig } from '../Data/Threat'
 
 export default function ThreatCard({ threat }) {
   const [isExpanded, setIsExpanded] = useState(false)
