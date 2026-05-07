@@ -1,5 +1,5 @@
 import ToggleButton from "../components/ToggleButton";
-import Clock from "../components/Clock";
+import BreachChecker from "../components/BreachChecker";
 
 function Home() {
   return (
@@ -10,7 +10,7 @@ function Home() {
 
         {/* CLOCK + TOGGLE */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <Clock />
+        
           <ToggleButton />
         </div>
 
@@ -45,28 +45,40 @@ function Home() {
         <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
 
           <div>
-            <h2 className="text-xl font-semibold text-green-500">3.5B+</h2>
+            <h2 className="text-xl font-semibold text-green-500">
+              3.5B+
+            </h2>
+
             <p className="text-xs text-gray-600 dark:text-gray-400">
               Phishing emails daily
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-green-500">4,000+</h2>
+            <h2 className="text-xl font-semibold text-green-500">
+              4,000+
+            </h2>
+
             <p className="text-xs text-gray-600 dark:text-gray-400">
               Attacks per day
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-green-500">$4.45M</h2>
+            <h2 className="text-xl font-semibold text-green-500">
+              $4.45M
+            </h2>
+
             <p className="text-xs text-gray-600 dark:text-gray-400">
               Avg breach cost
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-green-500">82%</h2>
+            <h2 className="text-xl font-semibold text-green-500">
+              82%
+            </h2>
+
             <p className="text-xs text-gray-600 dark:text-gray-400">
               Human-related breaches
             </p>
@@ -84,19 +96,26 @@ function Home() {
         <div className="grid md:grid-cols-3 gap-6">
 
           <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-            <h3 className="font-semibold mb-2">Learn the Threats</h3>
+            <h3 className="font-semibold mb-2">
+              Learn the Threats
+            </h3>
 
             <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
               Understand common attack methods like phishing and malware.
             </p>
 
-            <a href="/threats" className="text-sm text-green-500">
+            <a
+              href="/threats"
+              className="text-sm text-green-500"
+            >
               Explore →
             </a>
           </div>
 
           <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-            <h3 className="font-semibold mb-2">Stay Updated</h3>
+            <h3 className="font-semibold mb-2">
+              Stay Updated
+            </h3>
 
             <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
               Keep yourself aware of evolving cyber risks.
@@ -104,7 +123,9 @@ function Home() {
           </div>
 
           <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-            <h3 className="font-semibold mb-2">Use Best Practices</h3>
+            <h3 className="font-semibold mb-2">
+              Use Best Practices
+            </h3>
 
             <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
               Strong passwords, 2FA, and safe browsing habits go a long way.
@@ -123,7 +144,10 @@ function Home() {
               Common Threats
             </h2>
 
-            <a href="/threats" className="text-sm text-green-500">
+            <a
+              href="/threats"
+              className="text-sm text-green-500"
+            >
               View all →
             </a>
           </div>
@@ -131,7 +155,9 @@ function Home() {
           <div className="grid md:grid-cols-3 gap-6">
 
             <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold mb-2">Phishing</h3>
+              <h3 className="font-semibold mb-2">
+                Phishing
+              </h3>
 
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Fake emails or messages designed to steal your data.
@@ -139,7 +165,9 @@ function Home() {
             </div>
 
             <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold mb-2">Ransomware</h3>
+              <h3 className="font-semibold mb-2">
+                Ransomware
+              </h3>
 
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Malware that locks your files and demands payment.
@@ -147,7 +175,9 @@ function Home() {
             </div>
 
             <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold mb-2">Man-in-the-Middle</h3>
+              <h3 className="font-semibold mb-2">
+                Man-in-the-Middle
+              </h3>
 
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Attackers intercept communication between two parties.
@@ -158,10 +188,17 @@ function Home() {
         </div>
       </section>
 
+      {/* BREACH CHECKER */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <BreachChecker />
+      </section>
+
       {/* FOOTER */}
       <footer className="border-t border-gray-300 dark:border-gray-800">
         <div className="max-w-6xl mx-auto px-6 py-10 text-sm text-gray-600 dark:text-gray-400">
-          <p>CyberShield — Educational project using React + Tailwind.</p>
+          <p>
+            CyberShield — Educational project using React + Tailwind.
+          </p>
         </div>
       </footer>
 
