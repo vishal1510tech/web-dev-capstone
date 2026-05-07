@@ -2,120 +2,124 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import BreachChecker from '../Components/BreachChecker'
 
-const STATS = [
-  { value: '3.5B+', label: 'Phishing emails sent daily'  },
-  { value: '4,000+', label: 'Ransomware attacks per day' },
-  { value: '$4.45M', label: 'Avg. cost of a breach'      },
-  { value: '82%',    label: 'Breaches involve humans'    },
+const QUICK_STATS = [
+  { value: '3.5B+', label: 'Phishing emails sent every day' },
+  { value: '4,000+', label: 'Daily ransomware attacks' },
+  { value: '$4.45M', label: 'Average cost of a data breach' },
+  { value: '82%', label: 'Breaches that involve human error' },
 ]
 
-const FEATURES = [
+const CORE_FEATURES = [
   {
     icon: '🗂️',
-    title: 'Threat Gallery',
-    desc: 'Explore 8 real-world attack types with full breakdowns, prevention guides, and real-world examples.',
+    title: 'Threat Library',
+    desc: 'Deep dives into 8 common attack types with prevention tips and real-world examples.',
     href: '/threats',
-    cta: 'Browse threats →',
-    accent: 'group-hover:text-cyber-green',
+    cta: 'Explore the library →',
+    style: 'group-hover:text-cyber-green',
   },
   {
     icon: '🔍',
-    title: 'URL Scanner',
-    desc: 'Paste any suspicious link and scan it against the URLhaus malware database in real-time.',
+    title: 'Link Scanner',
+    desc: 'Verify suspicious links against the VirusTotal database in seconds.',
     href: '/scanner',
-    cta: 'Scan a URL →',
-    accent: 'group-hover:text-cyber-blue',
-    badge: 'NEW',
+    cta: 'Scan a link now →',
+    style: 'group-hover:text-cyber-blue',
+    isNew: true,
   },
   {
     icon: '🛠️',
-    title: 'Resources',
-    desc: 'Vetted free tools, privacy-first apps, learning platforms, and official reporting channels.',
+    title: 'Security Tools',
+    desc: 'Vetted list of free privacy apps, password managers, and official reporting portals.',
     href: '/resources',
-    cta: 'View resources →',
-    accent: 'group-hover:text-cyber-amber',
+    cta: 'Browse resources →',
+    style: 'group-hover:text-cyber-amber',
   },
 ]
 
-const TYPING_STRINGS = [
+const MESSAGES = [
   'Stay Ahead of Cyber Threats.',
-  'Check if your password was breached.',
-  'Scan suspicious URLs instantly.',
-  'Learn how attackers think.',
+  'Is your password actually safe?',
+  'Scan suspicious links instantly.',
+  'Think like an attacker to stay safe.',
 ]
 
-function useTypingEffect(strings, speed = 60, pause = 2000) {
-  const [text, setText]   = useState('')
-  const [phase, setPhase] = useState('typing')  // typing | pausing | deleting
-  const [strIdx, setStrIdx] = useState(0)
-  const [charIdx, setCharIdx] = useState(0)
+/**
+ * Custom hook for that classic typewriter effect on the hero section.
+ */
+function useTypewriter(lines, typeSpeed = 60, pauseTime = 2000) {
+  const [displayText, setDisplayText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [lineIndex, setLineIndex] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
 
   useEffect(() => {
-    const target = strings[strIdx]
+    const currentLine = lines[lineIndex]
     let timer
 
-    if (phase === 'typing') {
-      if (charIdx < target.length) {
-        timer = setTimeout(() => {
-          setText(target.slice(0, charIdx + 1))
-          setCharIdx(c => c + 1)
-        }, speed)
-      } else {
-        timer = setTimeout(() => setPhase('deleting'), pause)
-      }
+    if (!isDeleting && charIndex < currentLine.length) {
+      // Typing mode
+      timer = setTimeout(() => {
+        setDisplayText(currentLine.substring(0, charIndex + 1))
+        setCharIndex(prev => prev + 1)
+      }, typeSpeed)
+    } else if (isDeleting && charIndex > 0) {
+      // Deleting mode
+      timer = setTimeout(() => {
+        setDisplayText(currentLine.substring(0, charIndex - 1))
+        setCharIndex(prev => prev - 1)
+      }, typeSpeed / 2)
+    } else if (!isDeleting && charIndex === currentLine.length) {
+      // Pause at the end of the line
+      timer = setTimeout(() => setIsDeleting(true), pauseTime)
     } else {
-      if (charIdx > 0) {
-        timer = setTimeout(() => {
-          setText(target.slice(0, charIdx - 1))
-          setCharIdx(c => c - 1)
-        }, speed / 2)
-      } else {
-        setStrIdx(i => (i + 1) % strings.length)
-        setPhase('typing')
-      }
+      // Move to the next line after a tiny pause to avoid sync state update issues
+      timer = setTimeout(() => {
+        setIsDeleting(false)
+        setLineIndex(prev => (prev + 1) % lines.length)
+        setCharIndex(0)
+      }, 0)
     }
 
     return () => clearTimeout(timer)
-  }, [phase, charIdx, strIdx, strings, speed, pause])
+  }, [charIndex, isDeleting, lineIndex, lines, typeSpeed, pauseTime])
 
-  return text
+  return displayText
 }
 
 export default function Home() {
-  const typedText = useTypingEffect(TYPING_STRINGS)
+  const animatedHeader = useTypewriter(MESSAGES)
 
   return (
     <div className="pt-24 min-h-screen bg-grid">
-
-      {/* ── HERO ─────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-        <p className="section-label mb-4">Cybersecurity Awareness Platform</p>
+        <p className="section-label mb-4">Protect Your Digital Life</p>
 
         <h1 className="font-mono text-3xl sm:text-5xl font-black text-white leading-tight mb-2 min-h-[3.5rem] sm:min-h-[4rem]">
-          {typedText}
+          {animatedHeader}
           <span className="text-cyber-green animate-pulse ml-0.5">|</span>
         </h1>
 
         <p className="mt-6 max-w-xl text-sm text-cyber-muted font-mono leading-relaxed">
-          Learn how modern attacks work, check if your credentials were leaked,
-          and scan suspicious URLs — all from one place. No jargon, just useful knowledge.
+          The internet is a dangerous place, but it doesn't have to be confusing. 
+          Use our tools to check your credentials, scan suspicious links, and learn 
+          how to stay one step ahead of hackers.
         </p>
 
         <div className="flex flex-wrap gap-4 mt-10">
           <Link to="/scanner" className="cyber-btn cyber-btn-primary flex items-center gap-2">
-            <span>🔍</span> Scan a URL
+            <span>🔍</span> Scan a Link
             <span className="text-xs px-1.5 py-0.5 rounded bg-cyber-dark/40 text-cyber-blue border border-cyber-blue/30">NEW</span>
           </Link>
           <Link to="/threats" className="cyber-btn cyber-btn-secondary">
-            Explore Threats
+            Learn About Threats
           </Link>
         </div>
       </section>
 
-      {/* ── STATS ────────────────────────────────────────── */}
       <section className="border-t border-cyber-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {STATS.map(({ value, label }) => (
+          {QUICK_STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
               <p className="font-mono text-2xl sm:text-3xl font-black text-cyber-green text-glow-green mb-1">
                 {value}
@@ -126,13 +130,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURES ─────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <p className="section-label mb-2">What you can do here</p>
-        <h2 className="font-mono text-2xl font-bold text-white mb-10">Platform Features</h2>
+        <p className="section-label mb-2">What we offer</p>
+        <h2 className="font-mono text-2xl font-bold text-white mb-10">Key Features</h2>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {FEATURES.map(({ icon, title, desc, href, cta, accent, badge }) => (
+          {CORE_FEATURES.map(({ icon, title, desc, href, cta, style, isNew }) => (
             <Link
               key={title}
               to={href}
@@ -140,36 +143,35 @@ export default function Home() {
             >
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">{icon}</span>
-                <h3 className={`font-mono text-sm font-bold text-cyber-text transition-colors ${accent}`}>
+                <h3 className={`font-mono text-sm font-bold text-cyber-text transition-colors ${style}`}>
                   {title}
                 </h3>
-                {badge && (
+                {isNew && (
                   <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-cyber-blue/20 text-cyber-blue border border-cyber-blue/30">
-                    {badge}
+                    NEW
                   </span>
                 )}
               </div>
               <p className="text-xs font-mono text-cyber-muted leading-relaxed mb-5">{desc}</p>
-              <span className={`text-xs font-mono transition-colors text-cyber-muted ${accent}`}>{cta}</span>
+              <span className={`text-xs font-mono transition-colors text-cyber-muted ${style}`}>{cta}</span>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ── QUICK TIPS ───────────────────────────────────── */}
       <section className="border-t border-cyber-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
           <p className="section-label mb-2">Security 101</p>
-          <h2 className="font-mono text-2xl font-bold text-white mb-10">Essential Habits</h2>
+          <h2 className="font-mono text-2xl font-bold text-white mb-10">Good Habits to Start Today</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { icon: '🔑', tip: 'Use a unique password for every account — a password manager makes this easy.' },
-              { icon: '📲', tip: 'Enable two-factor authentication on email, banking, and social accounts.' },
-              { icon: '🔄', tip: 'Install security updates the same day they are released.' },
-              { icon: '🔍', tip: 'Hover over links before clicking — check the real destination URL.' },
-              { icon: '💾', tip: 'Follow the 3-2-1 backup rule: 3 copies, 2 media types, 1 offsite.' },
-              { icon: '📵', tip: 'Avoid public Wi-Fi for sensitive tasks — use mobile data or a VPN.' },
+              { icon: '🔑', tip: "Don't reuse passwords. Ever. A password manager makes this way easier." },
+              { icon: '📲', tip: 'Enable 2FA on everything—especially your email and bank accounts.' },
+              { icon: '🔄', tip: "Updates are annoying, but they fix critical security holes. Don't skip them." },
+              { icon: '🔍', tip: 'Hover before you click. Check if that link is actually where it says it is.' },
+              { icon: '💾', tip: 'Back up your stuff. 3 copies, 2 media types, 1 offsite (like cloud).' },
+              { icon: '📵', tip: "Public Wi-Fi is like a public bathroom—convenient, but don't trust it with sensitive data." },
             ].map(({ icon, tip }) => (
               <div key={tip} className="cyber-card p-5 flex gap-4 items-start">
                 <span className="text-xl shrink-0">{icon}</span>
@@ -180,13 +182,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── BREACH CHECKER ───────────────────────────────── */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-10 pb-20">
-        <p className="section-label mb-2">HIBP Passwords API + zxcvbn</p>
-        <h2 className="font-mono text-2xl font-bold text-white mb-8">Password Health Check</h2>
+        <p className="section-label mb-2">Real-time Safety Check</p>
+        <h2 className="font-mono text-2xl font-bold text-white mb-8">Password Vulnerability Test</h2>
         <BreachChecker />
       </section>
-
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => {
-  // Load .env.local so we can inject the API key into the dev proxy
+
   const env = loadEnv(mode, process.cwd(), '')
   const vtKey = env.VITE_VT_KEY || ''
 
@@ -10,8 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       proxy: {
-        // In dev: intercept /api/vt-scan and rewrite to VirusTotal with the key
-        // In prod: Vercel routes /api/vt-scan to the serverless function in /api/vt-scan.js
+
         '/api/vt-scan': {
           target: 'https://www.virustotal.com',
           changeOrigin: true,

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { severityConfig } from '../data/Threat'
+import { severityConfig } from '../Data/Threat'
 
 export default function ThreatCard({ threat }) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -7,7 +7,7 @@ export default function ThreatCard({ threat }) {
 
   return (
     <div className={`cyber-card p-5 transition-all duration-300 ${isExpanded ? 'border-cyber-blue/50' : ''}`}>
-      {/* Header */}
+
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <span className="text-2xl">{threat.icon}</span>
@@ -19,17 +19,17 @@ export default function ThreatCard({ threat }) {
         <span className={`text-xs px-2 py-0.5 rounded border font-mono ${sev.color}`}>{sev.label}</span>
       </div>
 
-      {/* Short desc */}
+
       <p className="text-xs text-cyber-muted font-mono leading-relaxed mb-4">{threat.shortDesc}</p>
 
-      {/* Tags */}
+
       <div className="flex flex-wrap gap-1.5 mb-4">
         {threat.tags.map(tag => (
           <span key={tag} className="text-xs px-2 py-0.5 bg-cyber-border/50 text-cyber-muted rounded font-mono">#{tag}</span>
         ))}
       </div>
 
-      {/* Expanded */}
+
       {isExpanded && (
         <div className="border-t border-cyber-border pt-4 mt-2 animate-fade-in-up opacity-0" style={{ animationFillMode: 'forwards' }}>
           <div className="mb-4">

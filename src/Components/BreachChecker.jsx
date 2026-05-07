@@ -5,32 +5,40 @@ import PasswordStrengthMeter from './PasswordStrengthMeter'
 const stateIcons = { idle: '🔑', loading: '⏳', safe: '✅', breached: '⚠️', error: '❌' }
 
 export default function BreachChecker() {
-  const [password, setPassword]   = useState('')
-  const [show, setShow]           = useState(false)
-  const [status, setStatus]       = useState('idle') // idle | loading | safe | breached | error
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [status, setStatus] = useState('idle')
   const [breachCount, setBreachCount] = useState(null)
-  const [errorMsg, setErrorMsg]   = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const handleCheck = async () => {
+  const runSecurityCheck = async () => {
     if (!password.trim()) return
+
+    // Show the user we're working on it
     setStatus('loading')
     setBreachCount(null)
     setErrorMsg('')
+
     try {
+      // We only send a prefix of the hash to HIBP for privacy (k-anonymity)
       const count = await checkPasswordBreach(password)
+
       if (count) {
-        setBreachCount(parseInt(count.replace(/,/g, ''), 10))
+        // Clean up the count in case the API returned formatted numbers
+        const cleanCount = parseInt(count.replace(/,/g, ''), 10)
+        setBreachCount(cleanCount)
         setStatus('breached')
       } else {
         setStatus('safe')
       }
-    } catch (e) {
+    } catch (err) {
+      console.error('Password check failed:', err)
       setStatus('error')
-      setErrorMsg('Failed to reach the API. Check your connection.')
+      setErrorMsg("Something went wrong with the API. Check your internet connection?")
     }
   }
 
-  const reset = () => {
+  const clearForm = () => {
     setPassword('')
     setStatus('idle')
     setBreachCount(null)
@@ -39,7 +47,6 @@ export default function BreachChecker() {
 
   return (
     <div className="cyber-card p-6 sm:p-8">
-      {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <span className="text-2xl">{stateIcons[status]}</span>
         <div>
@@ -53,27 +60,26 @@ export default function BreachChecker() {
         We use k-anonymity — only the first 5 characters of a SHA-1 hash leave your device.
       </p>
 
-      {/* Input row */}
       <div className="flex flex-col sm:flex-row gap-3 mb-2">
         <div className="relative flex-1">
           <input
-            type={show ? 'text' : 'password'}
+            type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleCheck()}
+            onKeyDown={e => e.key === 'Enter' && runSecurityCheck()}
             placeholder="Enter a password to check…"
             className="w-full bg-cyber-dark border border-cyber-border rounded px-4 py-2.5 pr-10 text-sm font-mono text-cyber-text placeholder:text-cyber-muted/50 focus:outline-none focus:border-cyber-green/60 transition-colors"
           />
           <button
-            onClick={() => setShow(s => !s)}
+            onClick={() => setShowPassword(s => !s)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-cyber-muted hover:text-cyber-text transition-colors text-xs font-mono"
-            title={show ? 'Hide' : 'Show'}
+            title={showPassword ? 'Hide' : 'Show'}
           >
-            {show ? '🙈' : '👁️'}
+            {showPassword ? '🙈' : '👁️'}
           </button>
         </div>
         <button
-          onClick={handleCheck}
+          onClick={runSecurityCheck}
           disabled={!password || status === 'loading'}
           className="cyber-btn cyber-btn-primary whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
         >
@@ -81,19 +87,17 @@ export default function BreachChecker() {
         </button>
       </div>
 
-      {/* Real-time strength meter */}
       <PasswordStrengthMeter password={password} />
 
-      {/* Result */}
       {status === 'breached' && (
         <div className="mt-5 p-4 rounded border border-cyber-red/40 bg-cyber-red/5">
           <p className="text-sm font-mono font-bold text-cyber-red mb-1">
             ⚠️ Breached — found {breachCount?.toLocaleString()} times
           </p>
           <p className="text-xs font-mono text-cyber-muted">
-            This password has appeared in data breaches. Never use it anywhere.
+            This password has appeared in data breaches. Please don't use it!
           </p>
-          <button onClick={reset} className="mt-3 text-xs font-mono text-cyber-muted hover:text-cyber-text transition-colors">
+          <button onClick={clearForm} className="mt-3 text-xs font-mono text-cyber-muted hover:text-cyber-text transition-colors">
             × Clear and try another
           </button>
         </div>
@@ -105,9 +109,9 @@ export default function BreachChecker() {
             ✅ Not found in any known breach
           </p>
           <p className="text-xs font-mono text-cyber-muted">
-            This password hasn't been seen in public breaches — but check the strength score above too.
+            This password hasn't been seen in public breaches — but make sure it's still strong.
           </p>
-          <button onClick={reset} className="mt-3 text-xs font-mono text-cyber-muted hover:text-cyber-text transition-colors">
+          <button onClick={clearForm} className="mt-3 text-xs font-mono text-cyber-muted hover:text-cyber-text transition-colors">
             × Check another
           </button>
         </div>

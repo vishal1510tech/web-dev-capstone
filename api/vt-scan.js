@@ -1,37 +1,46 @@
-/**
- * Vercel Serverless Function — proxies VirusTotal URL report requests.
- * The API key lives server-side in VT_KEY env var and is never exposed to the browser.
- */
 export default async function handler(req, res) {
-  // CORS preflight
+  // Simple CORS setup
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
-  if (req.method === 'OPTIONS') return res.status(200).end()
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end()
+  }
 
   const apiKey = process.env.VT_KEY
   if (!apiKey) {
-    return res.status(500).json({ error: 'VT_KEY not configured on this server.' })
+    console.error('VT_KEY is missing from environment variables')
+    return res.status(500).json({ error: 'Server configuration error (missing API key).' })
   }
 
-  const resource = req.query.resource
+  const { resource } = req.query
   if (!resource) {
-    return res.status(400).json({ error: 'resource query param required.' })
+    return res.status(400).json({ error: 'No resource provided for scanning.' })
   }
 
   try {
+    // Build the VirusTotal v2 API URL
     const vtUrl = `https://www.virustotal.com/vtapi/v2/url/report?apikey=${apiKey}&resource=${encodeURIComponent(resource)}`
-    const vtRes = await fetch(vtUrl)
+    
+    const vtResponse = await fetch(vtUrl)
 
-    // 204 = rate-limited (free tier: 4 req/min)
-    if (vtRes.status === 204) {
-      return res.status(429).json({ error: 'Rate limit reached. Wait a moment and try again.' })
+    // Handle rate limits (VirusTotal returns 204 when you hit the limit on the free tier)
+    if (vtResponse.status === 204) {
+      return res.status(429).json({ error: 'VirusTotal rate limit reached. Please wait a minute.' })
     }
 
-    const data = await vtRes.json()
-    // Cache results for 5 minutes on Vercel edge
+    if (!vtResponse.ok) {
+      throw new Error(`VirusTotal responded with ${vtResponse.status}`)
+    }
+
+    const data = await vtResponse.json()
+
+    // Cache the result for 5 minutes to save on API calls
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate')
+    
     return res.status(200).json(data)
   } catch (err) {
-    return res.status(502).json({ error: 'Failed to reach VirusTotal API.' })
+    console.error('Proxy error:', err)
+    return res.status(502).json({ error: 'Failed to communicate with the scanning service.' })
   }
 }

@@ -1,51 +1,51 @@
-const resources = [
-  {
-    category: 'Essential Tools', icon: '🛠️',
-    items: [
-      { name: 'Have I Been Pwned', url: 'https://haveibeenpwned.com', desc: 'Check if your email appeared in any known data breach. Free service by security researcher Troy Hunt.', tags: ['Free', 'Privacy'] },
-      { name: 'Bitwarden', url: 'https://bitwarden.com', desc: 'Open-source, end-to-end encrypted password manager. Generate and store unique passwords for every account.', tags: ['Free', 'Open Source', 'Passwords'] },
-      { name: 'Proton VPN', url: 'https://protonvpn.com', desc: 'Swiss-based VPN with a genuinely free tier. Encrypts your internet traffic on public Wi-Fi.', tags: ['Free Tier', 'VPN', 'Privacy'] },
-      { name: 'Authy', url: 'https://authy.com', desc: 'Two-factor authentication app. Enable MFA on every service that supports it.', tags: ['Free', 'MFA'] },
-    ],
-  },
-  {
-    category: 'Learning Resources', icon: '📚',
-    items: [
-      { name: 'SANS Cyber Aces', url: 'https://cyberaces.org', desc: 'Free online courses from SANS Institute covering networking, OS fundamentals, and systems security.', tags: ['Free', 'Beginner', 'Course'] },
-      { name: 'TryHackMe', url: 'https://tryhackme.com', desc: 'Gamified cybersecurity learning platform with guided rooms for beginners through to advanced practitioners.', tags: ['Free Tier', 'Hands-On'] },
-      { name: 'CERT-In (India)', url: 'https://www.cert-in.org.in', desc: "India's national cybersecurity agency. Advisories, incident reporting, and awareness resources for Indian users.", tags: ['Free', 'India', 'Official'] },
-      { name: 'CISA', url: 'https://www.cisa.gov/cybersecurity', desc: 'Official US government cybersecurity resources, alerts, and best-practice guides.', tags: ['Free', 'Official'] },
-    ],
-  },
-  {
-    category: 'Privacy-First Tools', icon: '🔐',
-    items: [
-      { name: 'Brave Browser', url: 'https://brave.com', desc: 'Chromium-based browser with built-in ad and tracker blocking. Significantly reduces your data footprint.', tags: ['Free', 'Browser', 'Privacy'] },
-      { name: 'DuckDuckGo', url: 'https://duckduckgo.com', desc: "Search engine that doesn't track your searches or build a profile on you.", tags: ['Free', 'Search', 'Privacy'] },
-      { name: 'Signal', url: 'https://signal.org', desc: 'End-to-end encrypted messaging app recommended by cryptography experts. No ads. No data collection.', tags: ['Free', 'Messaging', 'E2E'] },
-      { name: 'ProtonMail', url: 'https://proton.me', desc: 'End-to-end encrypted email hosted in Switzerland. Your emails cannot be read by anyone else.', tags: ['Free Tier', 'Email', 'E2E'] },
-    ],
-  },
-  {
-    category: 'Incident Reporting', icon: '🚨',
-    items: [
-      { name: 'Cybercrime.gov.in', url: 'https://cybercrime.gov.in', desc: "India's official portal to report cybercrimes including phishing, financial fraud, and online harassment.", tags: ['India', 'Official', 'Report'] },
-      { name: 'No More Ransom', url: 'https://www.nomoreransom.org', desc: 'Free ransomware decryption tools for many known ransomware families. Joint law enforcement project.', tags: ['Free', 'Ransomware'] },
-      { name: 'IC3 (FBI)', url: 'https://www.ic3.gov', desc: "FBI's internet crime complaint center for reporting cybercrime.", tags: ['USA', 'Official', 'Report'] },
-      { name: 'Action Fraud (UK)', url: 'https://www.actionfraud.police.uk', desc: "UK's national fraud and cybercrime reporting centre.", tags: ['UK', 'Official', 'Report'] },
-    ],
-  },
-]
+import { Link } from 'react-router-dom'
 
-const quickTips = [
-  { icon: '🔑', tip: 'Use a password manager and enable MFA everywhere.' },
-  { icon: '🔄', tip: 'Install security updates the same day they drop.' },
-  { icon: '💾', tip: 'Follow the 3-2-1 backup rule for important data.' },
-  { icon: '🔒', tip: 'Only use HTTPS sites for anything sensitive.' },
-  { icon: '📧', tip: 'Verify sender identity before clicking any link in email.' },
-  { icon: '📵', tip: 'Use mobile data, not public Wi-Fi, for banking apps.' },
-  { icon: '🧩', tip: 'Uninstall apps you no longer use.' },
-  { icon: '👁️', tip: 'Review and revoke unnecessary app permissions.' },
+const RESOURCE_CATEGORIES = [
+  {
+    id: 'tools',
+    title: 'Essential Privacy Tools',
+    icon: '🛠️',
+    description: "These are the basics. If you aren't using a password manager and a privacy-first browser, start here.",
+    links: [
+      { name: 'Bitwarden', desc: 'Open-source, free, and cross-platform password manager.', url: 'https://bitwarden.com' },
+      { name: 'uBlock Origin', desc: 'The only ad blocker you actually need. Fast and honest.', url: 'https://ublockorigin.com' },
+      { name: 'Brave Browser', desc: 'Chromium-based browser with built-in ad and tracker blocking.', url: 'https://brave.com' },
+      { name: 'Signal Messenger', desc: 'End-to-end encrypted messaging that actually respects your privacy.', url: 'https://signal.org' },
+    ]
+  },
+  {
+    id: 'learning',
+    title: 'Free Learning Platforms',
+    icon: '📚',
+    description: "Want to go deeper? These sites offer excellent, free courses on cybersecurity and ethical hacking.",
+    links: [
+      { name: 'TryHackMe', desc: 'Hands-on, gamified learning for all skill levels. Highly recommended.', url: 'https://tryhackme.com' },
+      { name: 'Cybrary', desc: 'Huge library of free video courses on security certifications.', url: 'https://cybrary.it' },
+      { name: 'OverTheWire', desc: 'Learn Linux and security basics through fun wargames.', url: 'https://overthewire.org' },
+    ]
+  },
+  {
+    id: 'checkers',
+    title: 'Instant Security Checkers',
+    icon: '🔍',
+    description: "Quick ways to check if your accounts or local files have been compromised.",
+    links: [
+      { name: 'Have I Been Pwned', desc: 'The gold standard for checking if your email has been in a data breach.', url: 'https://haveibeenpwned.com' },
+      { name: 'VirusTotal', desc: 'Upload files or paste links to scan them with 70+ antivirus engines.', url: 'https://virustotal.com' },
+      { name: 'URLhaus', desc: 'Community-driven database of malicious URLs being used for malware.', url: 'https://urlhaus.abuse.ch' },
+    ]
+  },
+  {
+    id: 'reporting',
+    title: 'Where to Report Scams',
+    icon: '📢',
+    description: "If you've been targeted by a scam, reporting it helps protect others from falling for the same trap.",
+    links: [
+      { name: 'Report Phishing (Google)', desc: 'Report malicious sites directly to Google Safe Browsing.', url: 'https://safebrowsing.google.com/safebrowsing/report_phish/' },
+      { name: 'FTC Fraud Report', desc: 'Official US portal to report identity theft and scams.', url: 'https://reportfraud.ftc.gov' },
+      { name: 'Action Fraud (UK)', desc: 'National reporting center for fraud and cybercrime in the UK.', url: 'https://www.actionfraud.police.uk' },
+    ]
+  }
 ]
 
 export default function Resources() {
@@ -53,48 +53,48 @@ export default function Resources() {
     <div className="pt-24 min-h-screen">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
         <div className="mb-12">
-          <p className="section-label">Toolbox</p>
-          <h1 className="font-display text-3xl sm:text-4xl font-black text-white tracking-wide mb-4">Resources & Tools</h1>
-          <p className="text-sm text-cyber-muted font-mono max-w-lg leading-relaxed">
-            Vetted free tools, learning platforms, and official reporting channels. Practical starting points — not paid promotions.
+          <p className="section-label">Curated Recommendations</p>
+          <h1 className="font-mono text-3xl sm:text-4xl font-black text-white tracking-wide mb-4">
+            Security Resources
+          </h1>
+          <p className="text-sm text-cyber-muted font-mono max-w-xl leading-relaxed">
+            I've put together a list of tools and platforms that are actually useful. 
+            Most of these are free, open-source, and widely trusted by the security community.
           </p>
         </div>
 
-        {/* Quick tips */}
-        <div className="cyber-card p-6 mb-14">
-          <p className="section-label mb-5">Quick Security Wins</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {quickTips.map((item, i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <span className="text-lg shrink-0">{item.icon}</span>
-                <p className="text-xs font-mono text-cyber-muted leading-relaxed">{item.tip}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {RESOURCE_CATEGORIES.map(category => (
+            <div key={category.id} className="cyber-card p-6 sm:p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="text-3xl">{category.icon}</span>
+                <div>
+                  <h2 className="font-mono text-xl font-bold text-cyber-text">{category.title}</h2>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
+              
+              <p className="text-xs font-mono text-cyber-muted mb-8 leading-relaxed italic">
+                "{category.description}"
+              </p>
 
-        {/* Resource sections */}
-        <div className="space-y-14">
-          {resources.map(section => (
-            <div key={section.category}>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-xl">{section.icon}</span>
-                <h2 className="font-display text-lg font-bold text-white tracking-wider">{section.category}</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {section.items.map(item => (
-                  <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer"
-                    className="cyber-card p-5 block hover:border-cyber-green/30 transition-colors duration-200 group">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-mono text-sm font-medium text-cyber-text group-hover:text-cyber-green transition-colors leading-snug">{item.name}</h3>
-                      <span className="text-cyber-muted/40 group-hover:text-cyber-green/60 transition-colors ml-3 mt-0.5 shrink-0">↗</span>
+              <div className="space-y-4">
+                {category.links.map(link => (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block p-4 rounded border border-cyber-border/40 hover:border-cyber-blue/40 bg-cyber-dark/40 transition-all"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-mono text-sm font-bold text-cyber-text group-hover:text-cyber-blue transition-colors">
+                        {link.name}
+                      </h3>
+                      <span className="text-cyber-muted group-hover:text-cyber-blue transition-colors text-xs">↗</span>
                     </div>
-                    <p className="text-xs text-cyber-muted font-mono leading-relaxed mb-3">{item.desc}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {item.tags.map(tag => (
-                        <span key={tag} className="text-xs px-2 py-0.5 bg-cyber-border/50 text-cyber-muted rounded font-mono">{tag}</span>
-                      ))}
-                    </div>
+                    <p className="text-xs font-mono text-cyber-muted leading-relaxed group-hover:text-cyber-text/80 transition-colors">
+                      {link.desc}
+                    </p>
                   </a>
                 ))}
               </div>
@@ -102,9 +102,20 @@ export default function Resources() {
           ))}
         </div>
 
-        <div className="mt-16 p-5 border border-cyber-border/40 rounded bg-cyber-surface/20">
+        <div className="mt-16 cyber-card p-8 border-cyber-blue/30 bg-cyber-blue/5 text-center">
+          <h3 className="font-mono text-lg font-bold text-white mb-4">Want a real challenge?</h3>
+          <p className="text-sm font-mono text-cyber-muted max-w-xl mx-auto mb-8 leading-relaxed">
+            Put your knowledge to the test. See if you can spot the phishing attempts 
+            and identify common security pitfalls in our interactive quiz.
+          </p>
+          <Link to="/quiz" className="cyber-btn cyber-btn-primary inline-flex items-center gap-2">
+            <span>🛡️</span> Take the Security Quiz
+          </Link>
+        </div>
+        
+        <div className="mt-10 p-5 border border-cyber-border/40 rounded bg-cyber-surface/20">
           <p className="text-xs font-mono text-cyber-muted leading-relaxed">
-            <span className="text-cyber-amber">Note:</span> All external links open in a new tab. This project is not affiliated with or sponsored by any tools listed above. Resources are included purely as educational aids.
+            <span className="text-cyber-amber">Note:</span> All external links open in a new tab. This project is not affiliated with or sponsored by any tools listed above.
           </p>
         </div>
       </div>

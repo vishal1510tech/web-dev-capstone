@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { quizQuestions, getRating } from '../data/quizData'
+import { quizQuestions, getRating } from '../Data/quizData'
 
 export function useQuiz() {
   const [currentIndex, setCurrentIndex]     = useState(0)
