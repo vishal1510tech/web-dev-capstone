@@ -1,209 +1,192 @@
-import ToggleButton from "../components/ToggleButton";
-import BreachChecker from "../components/BreachChecker";
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import BreachChecker from '../Components/BreachChecker'
 
-function Home() {
+const STATS = [
+  { value: '3.5B+', label: 'Phishing emails sent daily'  },
+  { value: '4,000+', label: 'Ransomware attacks per day' },
+  { value: '$4.45M', label: 'Avg. cost of a breach'      },
+  { value: '82%',    label: 'Breaches involve humans'    },
+]
+
+const FEATURES = [
+  {
+    icon: '🗂️',
+    title: 'Threat Gallery',
+    desc: 'Explore 8 real-world attack types with full breakdowns, prevention guides, and real-world examples.',
+    href: '/threats',
+    cta: 'Browse threats →',
+    accent: 'group-hover:text-cyber-green',
+  },
+  {
+    icon: '🔍',
+    title: 'URL Scanner',
+    desc: 'Paste any suspicious link and scan it against the URLhaus malware database in real-time.',
+    href: '/scanner',
+    cta: 'Scan a URL →',
+    accent: 'group-hover:text-cyber-blue',
+    badge: 'NEW',
+  },
+  {
+    icon: '🛠️',
+    title: 'Resources',
+    desc: 'Vetted free tools, privacy-first apps, learning platforms, and official reporting channels.',
+    href: '/resources',
+    cta: 'View resources →',
+    accent: 'group-hover:text-cyber-amber',
+  },
+]
+
+const TYPING_STRINGS = [
+  'Stay Ahead of Cyber Threats.',
+  'Check if your password was breached.',
+  'Scan suspicious URLs instantly.',
+  'Learn how attackers think.',
+]
+
+function useTypingEffect(strings, speed = 60, pause = 2000) {
+  const [text, setText]   = useState('')
+  const [phase, setPhase] = useState('typing')  // typing | pausing | deleting
+  const [strIdx, setStrIdx] = useState(0)
+  const [charIdx, setCharIdx] = useState(0)
+
+  useEffect(() => {
+    const target = strings[strIdx]
+    let timer
+
+    if (phase === 'typing') {
+      if (charIdx < target.length) {
+        timer = setTimeout(() => {
+          setText(target.slice(0, charIdx + 1))
+          setCharIdx(c => c + 1)
+        }, speed)
+      } else {
+        timer = setTimeout(() => setPhase('deleting'), pause)
+      }
+    } else {
+      if (charIdx > 0) {
+        timer = setTimeout(() => {
+          setText(target.slice(0, charIdx - 1))
+          setCharIdx(c => c - 1)
+        }, speed / 2)
+      } else {
+        setStrIdx(i => (i + 1) % strings.length)
+        setPhase('typing')
+      }
+    }
+
+    return () => clearTimeout(timer)
+  }, [phase, charIdx, strIdx, strings, speed, pause])
+
+  return text
+}
+
+export default function Home() {
+  const typedText = useTypingEffect(TYPING_STRINGS)
+
   return (
-    <div className="pt-24 min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-500">
+    <div className="pt-24 min-h-screen bg-grid">
 
-      {/* HERO */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+        <p className="section-label mb-4">Cybersecurity Awareness Platform</p>
 
-        {/* CLOCK + TOGGLE */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        
-          <ToggleButton />
-        </div>
-
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          Stay Ahead of Cyber Threats
+        <h1 className="font-mono text-3xl sm:text-5xl font-black text-white leading-tight mb-2 min-h-[3.5rem] sm:min-h-[4rem]">
+          {typedText}
+          <span className="text-cyber-green animate-pulse ml-0.5">|</span>
         </h1>
 
-        <p className="max-w-xl mb-8 text-gray-700 dark:text-gray-400">
-          Learn how modern cyber attacks work and how to protect yourself with
-          simple, practical habits. No jargon. Just useful knowledge.
+        <p className="mt-6 max-w-xl text-sm text-cyber-muted font-mono leading-relaxed">
+          Learn how modern attacks work, check if your credentials were leaked,
+          and scan suspicious URLs — all from one place. No jargon, just useful knowledge.
         </p>
 
-        <div className="flex gap-4">
-          <a
-            href="/threats"
-            className="px-6 py-3 bg-green-500 text-white rounded-md text-sm hover:opacity-90 transition"
-          >
+        <div className="flex flex-wrap gap-4 mt-10">
+          <Link to="/scanner" className="cyber-btn cyber-btn-primary flex items-center gap-2">
+            <span>🔍</span> Scan a URL
+            <span className="text-xs px-1.5 py-0.5 rounded bg-cyber-dark/40 text-cyber-blue border border-cyber-blue/30">NEW</span>
+          </Link>
+          <Link to="/threats" className="cyber-btn cyber-btn-secondary">
             Explore Threats
-          </a>
-
-          <a
-            href="/resources"
-            className="px-6 py-3 border border-gray-400 dark:border-gray-700 rounded-md text-sm hover:border-green-500 hover:text-green-500 transition"
-          >
-            View Resources
-          </a>
+          </Link>
         </div>
       </section>
 
-      {/* STATS */}
-      <section className="border-t border-gray-300 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-
-          <div>
-            <h2 className="text-xl font-semibold text-green-500">
-              3.5B+
-            </h2>
-
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              Phishing emails daily
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-green-500">
-              4,000+
-            </h2>
-
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              Attacks per day
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-green-500">
-              $4.45M
-            </h2>
-
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              Avg breach cost
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-green-500">
-              82%
-            </h2>
-
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              Human-related breaches
-            </p>
-          </div>
-
+      {/* ── STATS ────────────────────────────────────────── */}
+      <section className="border-t border-cyber-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-6">
+          {STATS.map(({ value, label }) => (
+            <div key={label} className="text-center">
+              <p className="font-mono text-2xl sm:text-3xl font-black text-cyber-green text-glow-green mb-1">
+                {value}
+              </p>
+              <p className="text-xs font-mono text-cyber-muted leading-snug">{label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* STEPS */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-semibold mb-10">
-          How to Stay Secure
-        </h2>
+      {/* ── FEATURES ─────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <p className="section-label mb-2">What you can do here</p>
+        <h2 className="font-mono text-2xl font-bold text-white mb-10">Platform Features</h2>
 
-        <div className="grid md:grid-cols-3 gap-6">
-
-          <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-            <h3 className="font-semibold mb-2">
-              Learn the Threats
-            </h3>
-
-            <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
-              Understand common attack methods like phishing and malware.
-            </p>
-
-            <a
-              href="/threats"
-              className="text-sm text-green-500"
+        <div className="grid md:grid-cols-3 gap-5">
+          {FEATURES.map(({ icon, title, desc, href, cta, accent, badge }) => (
+            <Link
+              key={title}
+              to={href}
+              className="cyber-card p-6 group block hover:border-cyber-green/20 transition-colors duration-200"
             >
-              Explore →
-            </a>
-          </div>
-
-          <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-            <h3 className="font-semibold mb-2">
-              Stay Updated
-            </h3>
-
-            <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
-              Keep yourself aware of evolving cyber risks.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-            <h3 className="font-semibold mb-2">
-              Use Best Practices
-            </h3>
-
-            <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
-              Strong passwords, 2FA, and safe browsing habits go a long way.
-            </p>
-          </div>
-
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">{icon}</span>
+                <h3 className={`font-mono text-sm font-bold text-cyber-text transition-colors ${accent}`}>
+                  {title}
+                </h3>
+                {badge && (
+                  <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-cyber-blue/20 text-cyber-blue border border-cyber-blue/30">
+                    {badge}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs font-mono text-cyber-muted leading-relaxed mb-5">{desc}</p>
+              <span className={`text-xs font-mono transition-colors text-cyber-muted ${accent}`}>{cta}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* THREATS PREVIEW */}
-      <section className="border-t border-gray-300 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 py-16">
+      {/* ── QUICK TIPS ───────────────────────────────────── */}
+      <section className="border-t border-cyber-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+          <p className="section-label mb-2">Security 101</p>
+          <h2 className="font-mono text-2xl font-bold text-white mb-10">Essential Habits</h2>
 
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-semibold">
-              Common Threats
-            </h2>
-
-            <a
-              href="/threats"
-              className="text-sm text-green-500"
-            >
-              View all →
-            </a>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-
-            <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold mb-2">
-                Phishing
-              </h3>
-
-              <p className="text-sm text-gray-700 dark:text-gray-400">
-                Fake emails or messages designed to steal your data.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold mb-2">
-                Ransomware
-              </h3>
-
-              <p className="text-sm text-gray-700 dark:text-gray-400">
-                Malware that locks your files and demands payment.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold mb-2">
-                Man-in-the-Middle
-              </h3>
-
-              <p className="text-sm text-gray-700 dark:text-gray-400">
-                Attackers intercept communication between two parties.
-              </p>
-            </div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { icon: '🔑', tip: 'Use a unique password for every account — a password manager makes this easy.' },
+              { icon: '📲', tip: 'Enable two-factor authentication on email, banking, and social accounts.' },
+              { icon: '🔄', tip: 'Install security updates the same day they are released.' },
+              { icon: '🔍', tip: 'Hover over links before clicking — check the real destination URL.' },
+              { icon: '💾', tip: 'Follow the 3-2-1 backup rule: 3 copies, 2 media types, 1 offsite.' },
+              { icon: '📵', tip: 'Avoid public Wi-Fi for sensitive tasks — use mobile data or a VPN.' },
+            ].map(({ icon, tip }) => (
+              <div key={tip} className="cyber-card p-5 flex gap-4 items-start">
+                <span className="text-xl shrink-0">{icon}</span>
+                <p className="text-xs font-mono text-cyber-muted leading-relaxed">{tip}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* BREACH CHECKER */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      {/* ── BREACH CHECKER ───────────────────────────────── */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-10 pb-20">
+        <p className="section-label mb-2">HIBP Passwords API + zxcvbn</p>
+        <h2 className="font-mono text-2xl font-bold text-white mb-8">Password Health Check</h2>
         <BreachChecker />
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-gray-300 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 py-10 text-sm text-gray-600 dark:text-gray-400">
-          <p>
-            CyberShield — Educational project using React + Tailwind.
-          </p>
-        </div>
-      </footer>
-
     </div>
-  );
+  )
 }
-
-export default Home;
