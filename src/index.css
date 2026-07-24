@@ -6,48 +6,48 @@
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    background-color: #060B18;
-    color: #C8D8F0;
-    font-family: 'IBM Plex Mono', monospace;
+    background-color: #0b0f19;
+    color: #cbd5e1;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     overflow-x: hidden;
   }
-  ::selection { background-color: #00FF87; color: #060B18; }
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #060B18; }
-  ::-webkit-scrollbar-thumb { background: #1A2744; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #00FF87; }
+  ::selection { background-color: #6366f1; color: #ffffff; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0b0f19; }
+  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #334155; }
 }
 
 @layer components {
   .cyber-card {
-    @apply bg-cyber-surface border border-cyber-border rounded-lg relative overflow-hidden;
+    @apply bg-slate-900/90 border border-slate-800 rounded-xl relative overflow-hidden transition-all duration-300 backdrop-blur-sm shadow-lg shadow-black/20;
   }
-  .cyber-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, #00FF87, transparent);
-    opacity: 0; transition: opacity 0.3s ease;
+  .cyber-card:hover {
+    @apply border-indigo-500/40 shadow-indigo-500/10 shadow-xl translate-y-[-1px];
   }
-  .cyber-card:hover::before { opacity: 1; }
 
-  .cyber-btn { @apply font-mono text-sm px-5 py-2.5 rounded border transition-all duration-200 cursor-pointer; }
-  .cyber-btn-primary  { @apply cyber-btn bg-transparent border-cyber-green text-cyber-green hover:bg-cyber-green hover:text-cyber-dark; }
-  .cyber-btn-secondary { @apply cyber-btn bg-transparent border-cyber-border text-cyber-text hover:border-cyber-blue hover:text-cyber-blue; }
+  .cyber-btn {
+    @apply text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 cursor-pointer inline-flex items-center justify-center gap-2;
+  }
+  .cyber-btn-primary {
+    @apply cyber-btn bg-indigo-600 text-white hover:bg-indigo-500 shadow-md shadow-indigo-600/25 active:translate-y-0.5;
+  }
+  .cyber-btn-secondary {
+    @apply cyber-btn bg-slate-800/90 text-slate-200 border border-slate-700 hover:bg-slate-700/80 hover:text-white hover:border-slate-600;
+  }
 
-  .section-label { @apply text-xs font-mono text-cyber-muted tracking-widest uppercase mb-2; }
-  .terminal-line::before { content: '> '; color: #00FF87; opacity: 0.6; }
+  .section-label {
+    @apply text-xs font-bold font-mono text-indigo-400 tracking-wider uppercase mb-2 inline-block px-2.5 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20;
+  }
 }
 
 @layer utilities {
-  .text-glow-green { text-shadow: 0 0 20px rgba(0,255,135,0.4); }
+  .text-glow-green { text-shadow: 0 0 15px rgba(16,185,129,0.3); }
   .bg-grid {
     background-image:
-      linear-gradient(rgba(26,39,68,0.4) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(26,39,68,0.4) 1px, transparent 1px);
-    background-size: 40px 40px;
+      radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+      linear-gradient(rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+    background-size: 100% 100%, 48px 48px, 48px 48px;
   }
-  .animate-delay-100 { animation-delay: 0.1s; }
-  .animate-delay-200 { animation-delay: 0.2s; }
-  .animate-delay-300 { animation-delay: 0.3s; }
-  .animate-delay-500 { animation-delay: 0.5s; }
 }
